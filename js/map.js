@@ -6,11 +6,12 @@ define(
 function (EventEmitter, Tile) {
     
 var Map = function (config) {
-    var defaultConfig = {
-        width : 50,
-        height: 50,
-        generator: ROT.Map.DividedMaze
-    };
+    var self = this,
+        defaultConfig = {
+            width : 50,
+            height: 50,
+            generator: ROT.Map.DividedMaze
+        };
     
     // Merge default config with defaults.
     config = $.extend({}, defaultConfig, config);
@@ -55,11 +56,30 @@ var Map = function (config) {
     }
     
     /**
-     * Generate the endpoints (i.e. spawn and goal nodes).
+     * Identify the goal endpoint.
      *
      * @private
      */
-    function _generateEndPoints (tiles) {
+    function _identifyGoalEndPoint () {
+        var safety = 0, safetyMax = 200;
+        var goalTile;
+    }
+    
+    /**
+     * Identify the spawn end point.
+     *
+     * @private
+     */
+    function _identifySpawnEndPoint () {
+        // TODO
+    }
+    
+    /**
+     * Solves the path between the given points.
+     *
+     * @private
+     */
+    function _solveMaze (start, end) {
         // TODO
     }
     
@@ -71,8 +91,36 @@ var Map = function (config) {
      * @param {Number} centery - The Y position of the cneter tile.
      * @param {Number} radius  - The radius of the area to return.
      */
-    self.getTileArea = function (centerx, centery, radius) {
-        // TODO
+    self.getTilesInArea = function (centerx, centery, radius) {
+        var xs = centerx - radius,
+            ys = centery - radius,
+            xe = centerx + radius,
+            ye = centery + radius,
+            x, y, tiles = [];
+        for(x=xs; x<xe; x++) {
+            tiles.push([]);
+            for (y=ys; y<ye; y++) {
+                var td;
+                if (_tiles[x] && _tiles[x][y]) {
+                    td = _tiles[x][y];
+                }
+                
+                // The given position is outside the bounds of the map.  Let's
+                // create a new tile to represent it.
+                else {
+                    td = new Tile({
+                        passable: false,
+                        discovered: false,
+                        seen: false,
+                        x: x,
+                        y: y
+                    });
+                }
+                
+                tiles[tiles.length-1].push(td);
+            }
+        }
+        return tiles;
     };
     
     /**
@@ -84,18 +132,19 @@ var Map = function (config) {
      * @param {Array}  bearing - An Array of Numbers that represents which
      *                           direction the observer is facing.
      */
-    self.getView = function (x, y, bearing) {
+    self.getPerspective = function (x, y, bearing) {
         // TODO
     };
     
     /**
      * Return a list of possible moves (as bearings) available from the tile in
-     * front of the given position.
+     * front of the given position.  If no bearing is given, a list of passable
+     * tiles that are adjacent to the given position are returned.
      *
-     * @param {Number} x       - X position.
-     * @param {Number} y       - Y position.
-     * @param {Array}  bearing - An Array of Numbers that represents which
-     *                           direction the observer is facing.
+     * @param {Number}  x       - X position.
+     * @param {Number}  y       - Y position.
+     * @param {Array}  [bearing] - An Array of Numbers that represents which
+     *                             direction the observer is facing.
      */
     self.getPossibleMoves = function (x, y, bearing) {
         // TODO
@@ -104,7 +153,6 @@ var Map = function (config) {
     // Initialize and generate the map data.
     _initMap(config.width, config.height);
     new config.generator(config.width, config.height).create(_populateMap);
-    console.log(_tiles);
     
 }
     
