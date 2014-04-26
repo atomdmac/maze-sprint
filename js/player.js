@@ -44,6 +44,14 @@ var Player = function (config) {
         // TODO
     }
     
+    // Define getters for x/y coords to make 'em easier to access.
+    self.__defineGetter__("x", function () {
+        return options.x;
+    });
+    self.__defineGetter__("y", function () {
+        return options.y;
+    });
+    
     /**
      * Move the Player.  If no arguments are given, the player will be moved by
      * one tile in the direction of their current bearing.
