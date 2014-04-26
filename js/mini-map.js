@@ -18,7 +18,7 @@ var MiniMap = function (config) {
     // Make sure our container element is wrapped in jQuery.
     config.container = $(config.container);
     
-    var _tiles;
+    var _tileSprites;
     
     /**
      * Draw the map centering around the given position.
@@ -30,9 +30,9 @@ var MiniMap = function (config) {
     self.draw = function (x, y, map) {
         var tiles = map.getTilesInArea(x, y, config.viewRadius);
         var xi, yi, xlen, ylen;
-        for(xi=0, xlen=_tiles.length; xi<xlen; xi++) {
-            for(yi=0, ylen=_tiles[xi].length; yi<ylen; yi++) {
-                self.drawTile(_tiles[xi][yi], tiles[xi][yi]);
+        for(xi=0, xlen=_tileSprites.length; xi<xlen; xi++) {
+            for(yi=0, ylen=_tileSprites[xi].length; yi<ylen; yi++) {
+                self.drawTile(_tileSprites[xi][yi], tiles[xi][yi]);
             }
         }
     };
@@ -70,10 +70,10 @@ var MiniMap = function (config) {
             yi = 0, ylen = (config.viewRadius * 2),
             tileEl = $("<div class='tile'></div>");
             
-        _tiles = [];
+        _tileSprites = [];
         
         for(; xi<xlen; xi++) {
-            _tiles[xi] = [];
+            _tileSprites[xi] = [];
             for(yi=0; yi<ylen; yi++) {
                 var t = tileEl.clone();
                 t.css({
@@ -83,7 +83,7 @@ var MiniMap = function (config) {
                     "height": config.cellSize + "px"
                 });
                 config.container.append(t);
-                _tiles[xi][yi] = t;
+                _tileSprites[xi][yi] = t;
             }
         }
     }
