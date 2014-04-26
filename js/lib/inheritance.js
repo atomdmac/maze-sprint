@@ -64,4 +64,6 @@ function(){
     
     return Class;
   };
+  
+  return this.Class;
 });
