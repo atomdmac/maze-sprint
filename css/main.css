@@ -1,0 +1,7 @@
+.mini-map {
+    position: absolute;
+    border: 1px solid black;
+}
+.tile {
+    position: absolute;
+}
