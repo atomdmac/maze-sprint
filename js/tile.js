@@ -11,13 +11,13 @@ var Tile = function (config) {
         x: 0,
         y: 0,
         // Whether or not the tile can be passed through.
-        passable : false,
+        passable  : false,
         // Whether or not the player has seen the given tile.
-        seen     : false,
+        seen      : false,
         // Whether or not the player is aware of this tile.
-        discoverd: false
+        discovered: false
     },
-    self;
+    self = this;
     
     config = $.extend(self, defaultConfig, config);
 }
