@@ -1,4 +1,11 @@
-EventEmitter = Class.extend({
+define(
+// Requirements
+["lib/inheritance"],
+
+// Module definition
+function (Class) {
+                
+var EventEmitter = Class.extend({
 
 	// Hash of strings representing valid Event types.
 	// NOTE: Not currently implemented.
@@ -141,4 +148,8 @@ EventEmitter = Class.extend({
     init: function () {
         this._handlers = {};
     }
+});
+
+return EventEmitter;
+
 });

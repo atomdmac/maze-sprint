@@ -1,9 +1,13 @@
 /* Simple JavaScript Inheritance
  * By John Resig http://ejohn.org/
  * MIT Licensed.
+ *
+ * Converted to a module by Atom and Zach when they did a code sprint on 04/26/2014
  */
 // Inspired by base2 and Prototype
-(function(){
+define(
+[],
+function(){
   var initializing = false, fnTest = /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/;
   // The base Class implementation (does nothing)
   this.Class = function(){};
@@ -60,4 +64,4 @@
     
     return Class;
   };
-})();
+});
