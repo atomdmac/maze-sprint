@@ -58,7 +58,6 @@ var FirstPerson = function (config) {
      * @param {Object} tileMatrix - A 9x9 matrix of tile objects.
      */
     self.setPerspective = function (tileMatrix) {
-        console.log(tileMatrix);
         _perspective = tileMatrix;
         _drawPerspective();
     };
