@@ -16,6 +16,10 @@ function (Map, MiniMap, FirstPerson, UndoManager) {
         viewRadius: 5,
         cellSize: 10
     });
+    var firstPerson = new FirstPerson({
+        container: $( $(".first-person")[0] )
+    });
+    firstPerson.setPerspective(map.getTilesInArea(25, 25, 1));
     // END MAP + MINI-MAP DEBUG CODE
     
     miniMap.draw(25, 25, map);

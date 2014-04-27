@@ -5,3 +5,14 @@
 .tile {
     position: absolute;
 }
+
+.first-person {
+    position: absolute;
+    border: 1px solid black;
+}
+.first-person img {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
