@@ -34,6 +34,36 @@ var MiniMap = function (config) {
                 self.drawTile(_tileSprites[xi][yi], tiles[xi][yi]);
             }
         }
+        
+        // Update player display.
+        // NORTH
+        if (playerBearing[0] == 0 && playerBearing[1] == -1) {
+            _player.css({
+                "-moz-transform"   : "rotate(0deg)",
+                "-webkit-transform": "rotate(0deg)"
+            });
+        }
+        // EAST
+        if (playerBearing[0] == 1 && playerBearing[1] == 0) {
+            _player.css({
+                "-moz-transform"   : "rotate(90deg)",
+                "-webkit-transform": "rotate(90deg)"
+            });
+        }
+        // SOUTH
+        if (playerBearing[0] == 0 && playerBearing[1] == 1) {
+            _player.css({
+                "-moz-transform"   : "rotate(180deg)",
+                "-webkit-transform": "rotate(180deg)"
+            });
+        }
+        // WEST
+        if (playerBearing[0] == -1 && playerBearing[1] == 0) {
+            _player.css({
+                "-moz-transform"   : "rotate(270deg)",
+                "-webkit-transform": "rotate(270deg)"
+            });
+        }
     };
     
     /**
@@ -93,8 +123,7 @@ var MiniMap = function (config) {
                 "top"   : (config.viewRadius * config.cellSize) + "px",
                 "left"  : (config.viewRadius * config.cellSize) + "px",
                 "width" : config.cellSize,
-                "height": config.cellSize,
-                "background": "blue"
+                "height": config.cellSize
             });
         
         config.container.append(_player);
