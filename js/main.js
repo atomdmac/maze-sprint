@@ -4,21 +4,76 @@ require.config({
 
 define(
 // Requirements
-["map", "mini-map", "first-person", "lib/undo-manager", "lib/jquery"],
+["map", "mini-map", "player", "first-person", "lib/undo-manager", "lib/jquery"],
 
 // Module definition
-function (Map, MiniMap, FirstPerson, UndoManager) {
+function (Map, MiniMap, Player, FirstPerson, UndoManager) {
     
-    // MAP + MINI-MAP DEBUG CODE
+    // START MAP + MINI-MAP DEBUG CODE
     var map = new Map();
     var miniMap = new MiniMap({
         container: $( $(".mini-map")[0] ),
         viewRadius: 5,
         cellSize: 10
     });
+    var player = new Player();
+    
+    miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing);
     // END MAP + MINI-MAP DEBUG CODE
     
-    miniMap.draw(25, 25, map);
+    /**
+     * Return a 2D Array of tiles that represents the player's current
+     * perspective.
+     */
+    function _getPlayerPerspective () {
+        
+        var tiles = map.getTilesInArea(player.x + player.bearing[0],
+                                       player.y + player.bearing[1]);
+        
+        // Rotate array to the right.
+        function rotate (arr){
+            var temp = new Array(arr.length);
+            var i, j;
+            for(i = 0; i < temp.length; ++i){
+            temp[i] = new Array(temp.length);
+            for (j = 0; j < temp.length; ++j){
+            temp[i][j] = arr[temp.length - j - 1][i];
+            }
+            }
+            arr = temp;
+        }
+        
+        var playerTile = tiles[1][2], safety = 0;
+        while (playerTile.x != player.x || playerTile.y != player.y) {
+            rotate(tiles);
+            
+            // A safety clause to make sure that my hastily written code doesn't
+            // break FireFox.  I know, I know... I'm worse than Hitler.
+            safety++;
+            if (safety > 3) break;
+        }
+        
+        return tiles;
+    }
+    
+    /**
+     * Check to see if the player can move in the given direction and return
+     * a Boolean representing success.
+     */
+    function _checkMove (bearing) {
+        var tiles  = map.getTilesInArea(player.x, player.y, 1);
+        
+        var tx = 1 + bearing[0],
+            ty = 1 + bearing[1],
+            target = tiles[tx][ty];
+            
+        if (target.passable) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     
     // Handle keyboard input for movement.
     $(window).keydown(function(e) {
@@ -27,16 +82,36 @@ function (Map, MiniMap, FirstPerson, UndoManager) {
             case 37:
                 e.preventDefault(); // Prevent scrolling the window.
                 console.log("TODO: Handle move left.");
+                
+                if (_checkMove([-1,0])) {
+                    player.bearLeft();
+                    player.move();
+                    miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing);
+                }
+                
                 break;
             // Up arrow
             case 38:
                 e.preventDefault(); // Prevent scrolling the window.
                 console.log("TODO: Handle move forward.");
+                
+                if (_checkMove([0,-1])) {
+                    player.move();
+                    miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing);
+                }
+                
                 break;
             // Right arrow
             case 39:
                 e.preventDefault(); // Prevent scrolling the window.
                 console.log("TODO: Handle move right.");
+                
+                if (_checkMove([1,0])) {
+                    player.bearRight();
+                    player.move();
+                    miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing);
+                }
+                
                 break;
             // Down arrow
             case 40:
