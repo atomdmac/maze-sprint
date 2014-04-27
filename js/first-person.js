@@ -24,11 +24,10 @@ var FirstPerson = function (config) {
         
         inferredView += _perspective[1][0].passable ? 1 : 0; // Top
         inferredView += _perspective[2][1].passable ? 1 : 0; // Right
-        inferredView += _perspective[1][0].passable ? 1 : 0; // Bottom
+        inferredView += _perspective[1][2].passable ? 1 : 0; // Bottom
         inferredView += _perspective[0][1].passable ? 1 : 0; // Left
         
         for(var lcv in _views){ _views[lcv].hide(); }
-        console.log(inferredView);
         _views[inferredView].show();
     }
     
