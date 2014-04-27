@@ -38,6 +38,10 @@ var MiniMap = function (config) {
         // Update player display.
         // NORTH
         if (playerBearing[0] == 0 && playerBearing[1] == -1) {
+            config.container.css({
+                "-moz-transform"   : "rotate(0deg)",
+                "-webkit-transform": "rotate(0deg)"
+            });
             _player.css({
                 "-moz-transform"   : "rotate(0deg)",
                 "-webkit-transform": "rotate(0deg)"
@@ -45,6 +49,10 @@ var MiniMap = function (config) {
         }
         // EAST
         if (playerBearing[0] == 1 && playerBearing[1] == 0) {
+            config.container.css({
+                "-moz-transform"   : "rotate(-90deg)",
+                "-webkit-transform": "rotate(-90deg)"
+            });
             _player.css({
                 "-moz-transform"   : "rotate(90deg)",
                 "-webkit-transform": "rotate(90deg)"
@@ -52,6 +60,10 @@ var MiniMap = function (config) {
         }
         // SOUTH
         if (playerBearing[0] == 0 && playerBearing[1] == 1) {
+            config.container.css({
+                "-moz-transform"   : "rotate(-180deg)",
+                "-webkit-transform": "rotate(-180deg)"
+            });
             _player.css({
                 "-moz-transform"   : "rotate(180deg)",
                 "-webkit-transform": "rotate(180deg)"
@@ -59,6 +71,10 @@ var MiniMap = function (config) {
         }
         // WEST
         if (playerBearing[0] == -1 && playerBearing[1] == 0) {
+            config.container.css({
+                "-moz-transform"   : "rotate(-270deg)",
+                "-webkit-transform": "rotate(-270deg)"
+            });
             _player.css({
                 "-moz-transform"   : "rotate(270deg)",
                 "-webkit-transform": "rotate(270deg)"
