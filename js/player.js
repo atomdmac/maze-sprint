@@ -46,10 +46,10 @@ var Player = function (config) {
     
     // Define getters for x/y coords to make 'em easier to access.
     self.__defineGetter__("x", function () {
-        return options.x;
+        return config.x;
     });
     self.__defineGetter__("y", function () {
-        return options.y;
+        return config.y;
     });
     
     /**
