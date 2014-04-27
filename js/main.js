@@ -24,7 +24,7 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
     var firstPerson = new FirstPerson({
         container: $( $(".first-person")[0] )
     });
-    firstPerson.setPerspective(map.getTilesInArea(player.x, player.y, 1));
+    firstPerson.setPerspective(_getPlayerPerspective());
 
     // END MAP + MINI-MAP DEBUG CODE
     
@@ -47,15 +47,16 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
             temp[i][j] = arr[temp.length - j - 1][i];
             }
             }
-            arr = temp;
+            return temp;
         }
         
         var playerTile = tiles[1][2], safety = 0;
         while (playerTile.x != player.x || playerTile.y != player.y) {
-            rotate(tiles);
-            
+            tiles = rotate(tiles);
+            playerTile = tiles[1][2], safety = 0;
             // A safety clause to make sure that my hastily written code doesn't
             // break FireFox.  I know, I know... I'm worse than Hitler.
+        
             safety++;
             if (safety > 3) break;
         }
@@ -67,13 +68,24 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
      * Check to see if the player can move in the given direction and return
      * a Boolean representing success.
      */
-    function _checkMove (bearing) {
-        var tiles  = map.getTilesInArea(player.x, player.y, 1);
+    function _checkMove (direction) {
+        var tiles  = _getPlayerPerspective();
+        var target;
         
-        var tx = 1 + bearing[0],
-            ty = 1 + bearing[1],
-            target = tiles[tx][ty];
-            
+        switch (direction) {
+            case "left":
+                target = tiles[0][1];
+                break;
+            case "forward":
+                target = tiles[1][0];
+                break;
+            case "right":
+                target = tiles[2][1];
+                break;
+            default:
+                break;
+        }
+        
         if (target.passable) {
             return true;
         } else {
@@ -88,10 +100,10 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
             // Left arrow
             case 37:
                 e.preventDefault(); // Prevent scrolling the window.
-                console.log("TODO: Handle move left.");
                 
-                player.bearLeft();
-                if (_checkMove(player.bearing)) {
+                if (_checkMove("left")) {
+                    player.move();
+                    player.bearLeft();
                     miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing);
                     firstPerson.setPerspective(_getPlayerPerspective());
                 }
@@ -100,9 +112,8 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
             // Up arrow
             case 38:
                 e.preventDefault(); // Prevent scrolling the window.
-                console.log("TODO: Handle move forward.");
                 
-                if (_checkMove(player.bearing)) {
+                if (_checkMove("forward")) {
                     player.move();
                     miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing);
                     firstPerson.setPerspective(_getPlayerPerspective());
@@ -112,10 +123,10 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
             // Right arrow
             case 39:
                 e.preventDefault(); // Prevent scrolling the window.
-                console.log("TODO: Handle move right.");
                 
-                player.bearRight();
-                if (_checkMove(player.bearing)) {
+                if (_checkMove("right")) {
+                    player.move();
+                    player.bearRight();
                     miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing);
                     firstPerson.setPerspective(_getPlayerPerspective());
                 }

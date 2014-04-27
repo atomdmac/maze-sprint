@@ -12,7 +12,7 @@ var Player = function (config) {
     // Default configuration
     var defaultConfig = {
         x: 0,
-        y: 0,
+        y: 1,
         bearing: [0, -1, 0, 1]
     };
     
