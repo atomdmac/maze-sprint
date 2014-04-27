@@ -1,9 +1,9 @@
 define(
 // Requirements
-["lib/event-emitter", "lib/undo-manager", "bearing", "lib/jquery"],
+["lib/undo-manager", "bearing", "lib/jquery"],
 
 // Module definition
-function (EventEmitter, UndoManager, Bearing) {
+function (UndoManager, Bearing) {
 
 var Player = function (config) {
     
@@ -17,13 +17,6 @@ var Player = function (config) {
     };
     
     config = $.extend({}, defaultConfig, config);
-    
-    // Set up events.
-    var eventer = new EventEmitter();
-    self.bind      = eventer.bind;
-    self.unbind    = eventer.unbind;
-    self.trigger   = eventer.trigger;
-    self.triggerAs = eventer.triggerAs;
     
     // Set up undo/redo
     var undoManager = new UndoManager();
@@ -77,9 +70,6 @@ var Player = function (config) {
                 _move(stepData.to.x, stepData.to.y);
             }
         });
-        
-        // Alert listeners.
-        eventer.triggerAs(this, "move", stepData);
     };
     
     /**
