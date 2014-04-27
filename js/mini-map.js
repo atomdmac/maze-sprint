@@ -23,12 +23,11 @@ var MiniMap = function (config) {
     /**
      * Draw the map centering around the given position.
      *
-     * @param {Number} x - X position.
-     * @param {Number} y - Y position.
-     * @param {Object} map - The Map Object to draw.
+     * @param {Array} tiles         - A list of tiles in the current view.
+     * @param {Array} playerBearing - The direction that the player is facing.
      */
-    self.draw = function (x, y, map) {
-        var tiles = map.getTilesInArea(x, y, config.viewRadius);
+    self.draw = function (tiles, playerBearing) {
+        // Draw map tiles.
         var xi, yi, xlen, ylen;
         for(xi=0, xlen=_tileSprites.length; xi<xlen; xi++) {
             for(yi=0, ylen=_tileSprites[xi].length; yi<ylen; yi++) {
@@ -86,6 +85,19 @@ var MiniMap = function (config) {
                 _tileSprites[xi][yi] = t;
             }
         }
+        
+        // Draw player.
+        _player = tileEl.clone()
+            .addClass("player")
+            .css({
+                "top"   : (config.viewRadius * config.cellSize) + "px",
+                "left"  : (config.viewRadius * config.cellSize) + "px",
+                "width" : config.cellSize,
+                "height": config.cellSize,
+                "background": "blue"
+            });
+        
+        config.container.append(_player);
     }
     
     // Initialize the MiniMap instance.

@@ -1,9 +1,9 @@
 define(
 // Requirements
-["lib/event-emitter", "lib/undo-manager", "bearing", "lib/jquery"],
+["lib/undo-manager", "lib/jquery"],
 
 // Module definition
-function (EventEmitter, UndoManager, Bearing) {
+function (UndoManager) {
 
 var Player = function (config) {
     
@@ -13,17 +13,10 @@ var Player = function (config) {
     var defaultConfig = {
         x: 0,
         y: 0,
-        bearing: Bearing.NORTH
+        bearing: [0, -1, 0, 1]
     };
     
     config = $.extend({}, defaultConfig, config);
-    
-    // Set up events.
-    var eventer = new EventEmitter();
-    self.bind      = eventer.bind;
-    self.unbind    = eventer.unbind;
-    self.trigger   = eventer.trigger;
-    self.triggerAs = eventer.triggerAs;
     
     // Set up undo/redo
     var undoManager = new UndoManager();
@@ -43,6 +36,14 @@ var Player = function (config) {
     self.undo = function () {
         // TODO
     }
+    
+    // Define getters for x/y coords to make 'em easier to access.
+    self.__defineGetter__("x", function () {
+        return config.x;
+    });
+    self.__defineGetter__("y", function () {
+        return config.y;
+    });
     
     /**
      * Move the Player.  If no arguments are given, the player will be moved by
@@ -69,9 +70,6 @@ var Player = function (config) {
                 _move(stepData.to.x, stepData.to.y);
             }
         });
-        
-        // Alert listeners.
-        eventer.triggerAs(this, "move", stepData);
     };
     
     /**
@@ -108,22 +106,27 @@ var Player = function (config) {
     }
     
     /**
-     * Causes the player to face a different direction.
-     *
-     * @param {Array} direction - An array representing a cardinal direction.
-     * @return Void
+     * Return the player's current bearing as an Array where the indices
+     * represent the x and y offset, respectively.
      */
-    self.bear = function (direction) {
-        switch(direction) {
-            case Bearing.NORTH:
-            case Bearing.EAST:
-            case Bearing.SOUTH:
-            case Bearing.WEST:
-                config.baring = direction;
-                break;
-            default:
-                throw Error("Invalid direction given to Player.move(), '" + direction + "'");
-        }
+    self.__defineGetter__("bearing", function () {
+        return [config.bearing[0], config.bearing[1]];
+    });
+    
+    /**
+     * Cause the player's bearing to shift 90 deg to the right.
+     */
+    self.bearRight = function () {
+        var n = config.bearing.pop();
+        config.bearing.unshift(n);
+    };
+    
+    /**
+     * Cause the player's bearing to shift 90 deg to the left.
+     */
+    self.bearLeft = function () {
+        var n = config.bearing.shift();
+        config.bearing.push(n);
     };
 }
 

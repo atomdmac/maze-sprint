@@ -1,3 +1,6 @@
+define(
+[],
+function () {
 var UndoManager = function () {
     "use strict";
 
@@ -110,6 +113,10 @@ var UndoManager = function () {
 		}		
 	};
 };
+
+return UndoManager;
+
+});
 
 /*
 LICENSE
