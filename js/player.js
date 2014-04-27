@@ -109,7 +109,7 @@ var Player = function (config) {
      * Return the player's current bearing as an Array where the indices
      * represent the x and y offset, respectively.
      */
-    self.__defineGetter("bearing", function () {
+    self.__defineGetter__("bearing", function () {
         return [config.bearing[0], config.bearing[1]];
     });
     
