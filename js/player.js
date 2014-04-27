@@ -13,7 +13,7 @@ var Player = function (config) {
     var defaultConfig = {
         x: 0,
         y: 0,
-        bearing: Bearing.NORTH
+        bearing: [0, -1, 0, 1]
     };
     
     config = $.extend({}, defaultConfig, config);
@@ -106,22 +106,27 @@ var Player = function (config) {
     }
     
     /**
-     * Causes the player to face a different direction.
-     *
-     * @param {Array} direction - An array representing a cardinal direction.
-     * @return Void
+     * Return the player's current bearing as an Array where the indices
+     * represent the x and y offset, respectively.
      */
-    self.bear = function (direction) {
-        switch(direction) {
-            case Bearing.NORTH:
-            case Bearing.EAST:
-            case Bearing.SOUTH:
-            case Bearing.WEST:
-                config.baring = direction;
-                break;
-            default:
-                throw Error("Invalid direction given to Player.move(), '" + direction + "'");
-        }
+    self.__defineGetter("bearing", function () {
+        return [config.bearing[0], config.bearing[1]];
+    });
+    
+    /**
+     * Cause the player's bearing to shift 90 deg to the right.
+     */
+    self.bearRight = function () {
+        var n = config.bearing.pop();
+        config.bearing.unshift(n);
+    };
+    
+    /**
+     * Cause the player's bearing to shift 90 deg to the left.
+     */
+    self.bearLeft = function () {
+        var n = config.bearing.shift();
+        config.bearing.push(n);
     };
 }
 
