@@ -1,9 +1,9 @@
 define(
 // Requirements
-["lib/undo-manager", "bearing", "lib/jquery"],
+["lib/undo-manager", "lib/jquery"],
 
 // Module definition
-function (UndoManager, Bearing) {
+function (UndoManager) {
 
 var Player = function (config) {
     
