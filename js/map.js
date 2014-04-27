@@ -1,6 +1,6 @@
 define(
 // Requirements
-["lib/event-emitter", "tile", "lib/jquery", "lib/rot"],
+["lib/event-emitter", "tile", "math-tools", "lib/jquery", "lib/rot"],
 
 // Module definition
 function (EventEmitter, Tile) {
@@ -23,7 +23,7 @@ var Map = function (config) {
     self.trigger   = eventer.trigger;
     self.triggerAs = eventer.triggerAs;
     
-    var _tiles;
+    var _tiles, _passableTiles, _solvedPath, endPoints;
     
     /**
      * Initializes the map data structure and prepares it to be populated with
@@ -32,7 +32,7 @@ var Map = function (config) {
      * @private
      */
     function _initMap (width, height) {
-        _tiles = [];
+        _tiles = [], _passableTiles = [];
         var xi = 0;
         for(;xi<width; xi++) {
             _tiles[xi] = new Array(height);
@@ -46,32 +46,34 @@ var Map = function (config) {
      * @private
      */
     function _populateMap (x, y, type) {
-        _tiles[x][y] = new Tile({
+        var tile = new Tile({
             x: x,
             y: y,
             passable  : type ? true : false,
             seen      : false,
             discovered: false
         });
+        
+        _tiles[x][y] = tile;
+        
+        // If tile is passable, make a note of it.  This makes it easier to
+        // determine what our spawn/goal end points are later.
+        if (tile.passable === 0) _passableTiles.push(tile);
     }
     
-    /**
-     * Identify the goal endpoint.
-     *
-     * @private
-     */
-    function _identifyGoalEndPoint () {
-        var safety = 0, safetyMax = 200;
-        var goalTile;
-    }
-    
-    /**
-     * Identify the spawn end point.
-     *
-     * @private
-     */
-    function _identifySpawnEndPoint () {
-        // TODO
+    self.getEndPoints = function () {
+        if (endPoints) return endPoints;
+        
+        // TODO: Make sure spawn and goal end points are never the same.
+        var spawnIdx = MathTools.randomInt(0, _passableTiles.length),
+            goalIdx  = MathTools.randomInt(0, _passableTiles.length);
+        
+        endPoints = {
+            spawn: _passableTiles[spawnIdx],
+            goal : _passableTiles[goalIdx]
+        }
+        
+        return endPoints;
     }
     
     /**
@@ -88,7 +90,7 @@ var Map = function (config) {
      * the given radius.
      *
      * @param {Number} centerx - The X position of the center tile.
-     * @param {Number} centery - The Y position of the cneter tile.
+     * @param {Number} centery - The Y position of the center tile.
      * @param {Number} radius  - The radius of the area to return.
      */
     self.getTilesInArea = function (centerx, centery, radius) {
