@@ -33,9 +33,9 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
      * perspective.
      */
     function _getPlayerPerspective () {
-        
         var tiles = map.getTilesInArea(player.x + player.bearing[0],
-                                       player.y + player.bearing[1]);
+                                       player.y + player.bearing[1],
+                                       1);
         
         // Rotate array to the right.
         function rotate (arr){
@@ -90,10 +90,10 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
                 e.preventDefault(); // Prevent scrolling the window.
                 console.log("TODO: Handle move left.");
                 
-                if (_checkMove([-1,0])) {
-                    player.bearLeft();
-                    player.move();
+                player.bearLeft();
+                if (_checkMove(player.bearing)) {
                     miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing);
+                    firstPerson.setPerspective(_getPlayerPerspective());
                 }
                 
                 break;
@@ -102,9 +102,10 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
                 e.preventDefault(); // Prevent scrolling the window.
                 console.log("TODO: Handle move forward.");
                 
-                if (_checkMove([0,-1])) {
+                if (_checkMove(player.bearing)) {
                     player.move();
                     miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing);
+                    firstPerson.setPerspective(_getPlayerPerspective());
                 }
                 
                 break;
@@ -113,10 +114,10 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
                 e.preventDefault(); // Prevent scrolling the window.
                 console.log("TODO: Handle move right.");
                 
-                if (_checkMove([1,0])) {
-                    player.bearRight();
-                    player.move();
+                player.bearRight();
+                if (_checkMove(player.bearing)) {
                     miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing);
+                    firstPerson.setPerspective(_getPlayerPerspective());
                 }
                 
                 break;
