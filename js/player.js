@@ -55,55 +55,10 @@ var Player = function (config) {
      * 
      * @return Void
      */
-    self.move = function (newX, newY, newBearing) {
-        // Move the Player and store a copy of the data that is generated.
-        var stepData = _movePlayer(newX, newY, newBearing);
-        
-        // TODO: Check redo stack to see if the requested movement is a copy of previously recorded action.
-        
-        // Add the movement action to the undo/redo stack.
-        undoManager.add({
-            undo: function () {
-                _move(stepData.from.x, stepData.from.y);
-            },
-            redo: function () {
-                _move(stepData.to.x, stepData.to.y);
-            }
-        });
+    self.move = function () {
+        config.x += config.bearing[0];
+        config.y += config.bearing[1];
     };
-    
-    /**
-     * Private function to facilitate the actual movement logic.  Clients that
-     * are external to the Player module will make use of this by calling
-     * Player.move() on a Player instance.
-     * @private
-     */
-    function _move (newX, newY, newBearing) {
-        // Derive new values if necessary.
-        newX = newX || config.bearing[0];
-        newY = newY || config.bearing[1];
-        newBearing = newBearing || config.bearing;
-        
-        var stepData = {
-            from: {
-                x: config.x,
-                y: config.y,
-                bearing: config.bearing
-            },
-            to: {
-                x: newX,
-                y: newY,
-                bearing: newBearing
-            },
-        }
-        
-        // Update current values.
-        config.x = newX;
-        config.y = newY;
-        self.bear(newBearing);
-        
-        return stepData;
-    }
     
     /**
      * Return the player's current bearing as an Array where the indices
