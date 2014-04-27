@@ -5,3 +5,6 @@
 .tile {
     position: absolute;
 }
+.player {
+    background: blue;
+}
