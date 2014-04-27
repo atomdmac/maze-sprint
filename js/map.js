@@ -99,9 +99,9 @@ var Map = function (config) {
             xe = centerx + radius,
             ye = centery + radius,
             x, y, tiles = [];
-        for(x=xs; x<xe; x++) {
+        for(x=xs; x<=xe; x++) {
             tiles.push([]);
-            for (y=ys; y<ye; y++) {
+            for (y=ys; y<=ye; y++) {
                 var td;
                 if (_tiles[x] && _tiles[x][y]) {
                     td = _tiles[x][y];
