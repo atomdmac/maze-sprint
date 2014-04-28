@@ -60,6 +60,11 @@ var Player = function (config) {
         config.y += config.bearing[1];
     };
     
+    self.relocate = function (x, y) {
+        config.x = x;
+        config.y = y;
+    };
+    
     /**
      * Return the player's current bearing as an Array where the indices
      * represent the x and y offset, respectively.
@@ -83,6 +88,21 @@ var Player = function (config) {
         var n = config.bearing.shift();
         config.bearing.push(n);
     };
+    
+    self.bear = function (bearing) {
+        var cnt = 0;
+        while (true) {
+            cnt++;
+            if (cnt>4) {
+                throw Error("Invalid bearing given.");
+                break;
+            }
+            if (bearing[0] == config.bearing[0] && bearing[1] == config.bearing[1]) {
+                break;
+            }
+            self.bearLeft();
+        }
+    }
 }
 
 return Player;
