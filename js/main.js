@@ -93,6 +93,24 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
         }
     }
     
+    var _undoManager = new UndoManager();
+    function _recordAction (from, to) {
+        _undoManager.add({
+            undo: function () {
+                player.relocate(from.position.x, from.position.y);
+                player.bear(from.bearing);
+                miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing);
+                firstPerson.setPerspective(_getPlayerPerspective());
+            },
+            redo: function () {
+                player.relocate(to.position.x, to.position.y);
+                player.bear(to.bearing);
+                miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing);
+                firstPerson.setPerspective(_getPlayerPerspective());
+            }
+        });
+    }
+    
     
     // Handle keyboard input for movement.
     $(window).keydown(function(e) {
@@ -102,8 +120,20 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
                 e.preventDefault(); // Prevent scrolling the window.
                 
                 if (_checkMove("left")) {
+                    var from = {
+                        position: {x: player.x, y: player.y},
+                        bearing : [player.bearing[0], player.bearing[1]]
+                    };
+                        
                     player.move();
                     player.bearLeft();
+                    
+                    var to =  {
+                        position: {x: player.x, y: player.y},
+                        bearing : [player.bearing[0], player.bearing[1]]
+                    };
+                    _recordAction(from, to);
+                    
                     miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing);
                     firstPerson.setPerspective(_getPlayerPerspective());
                 }
@@ -114,7 +144,19 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
                 e.preventDefault(); // Prevent scrolling the window.
                 
                 if (_checkMove("forward")) {
+                    var from = {
+                        position: {x: player.x, y: player.y},
+                        bearing : [player.bearing[0], player.bearing[1]]
+                    };
+                        
                     player.move();
+                    
+                    var to =  {
+                        position: {x: player.x, y: player.y},
+                        bearing : [player.bearing[0], player.bearing[1]]
+                    };
+                    _recordAction(from, to);
+                    
                     miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing);
                     firstPerson.setPerspective(_getPlayerPerspective());
                 }
@@ -125,8 +167,20 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
                 e.preventDefault(); // Prevent scrolling the window.
                 
                 if (_checkMove("right")) {
+                    var from = {
+                        position: {x: player.x, y: player.y},
+                        bearing : [player.bearing[0], player.bearing[1]]
+                    };
+                        
                     player.move();
                     player.bearRight();
+                    
+                    var to =  {
+                        position: {x: player.x, y: player.y},
+                        bearing : [player.bearing[0], player.bearing[1]]
+                    };
+                    _recordAction(from, to);
+                    
                     miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing);
                     firstPerson.setPerspective(_getPlayerPerspective());
                 }
@@ -154,11 +208,17 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
             case 1:
                 e.preventDefault(); // Prevent scrolling the window.
                 console.log("TODO: Handle redo.");
+                if (_undoManager.hasRedo()) {
+                    _undoManager.redo();
+                }
                 break;
             // Scroll down
             case -1:
                 e.preventDefault(); // Prevent scrolling the window.
                 console.log("TODO: Handle undo.");
+                if (_undoManager.hasUndo()) {
+                    _undoManager.undo();
+                }
                 break;
             default:
                 break;
