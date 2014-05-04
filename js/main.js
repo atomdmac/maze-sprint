@@ -17,7 +17,14 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
         cellSize: 10
     });
 
+    var endPoints = map.getEndPoints(),
+        initBearing = map.getInitialBearing(endPoints.spawn, endPoints.goal);
+
+    map.markEndPoints();
+
     var player = new Player();
+    player.relocate(endPoints.spawn.x, endPoints.spawn.y);
+    player.bear(initBearing);
     
     miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing);
 
@@ -25,6 +32,7 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
         container: $( $(".first-person")[0] )
     });
     firstPerson.setPerspective(_getPlayerPerspective());
+
 
     // END MAP + MINI-MAP DEBUG CODE
     
@@ -134,7 +142,7 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
                     };
                     _recordAction(from, to);
                     
-                    miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing);
+                    miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing, endPoints);
                     firstPerson.setPerspective(_getPlayerPerspective());
                 }
                 

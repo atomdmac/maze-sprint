@@ -1,9 +1,9 @@
 define(
 // Requirements
-["lib/event-emitter", "tile", "math-tools", "lib/jquery", "lib/rot"],
+["tile", "math-tools", "lib/jquery", "lib/rot"],
 
 // Module definition
-function (EventEmitter, Tile) {
+function (Tile, MathTools) {
     
 var Map = function (config) {
     var self = this,
@@ -16,13 +16,6 @@ var Map = function (config) {
     // Merge default config with defaults.
     config = $.extend({}, defaultConfig, config);
     
-    // Set up events.
-    var eventer = new EventEmitter();
-    self.bind      = eventer.bind;
-    self.unbind    = eventer.unbind;
-    self.trigger   = eventer.trigger;
-    self.triggerAs = eventer.triggerAs;
-    
     var _tiles, _passableTiles, _solvedPath, endPoints;
     
     /**
@@ -32,7 +25,8 @@ var Map = function (config) {
      * @private
      */
     function _initMap (width, height) {
-        _tiles = [], _passableTiles = [];
+        _tiles = [];
+        _passableTiles = [];
         var xi = 0;
         for(;xi<width; xi++) {
             _tiles[xi] = new Array(height);
@@ -51,14 +45,16 @@ var Map = function (config) {
             y: y,
             passable  : type ? true : false,
             seen      : false,
-            discovered: false
+            discovered: false,
+            isGoal    : false,
+            isSpawn   : false
         });
         
         _tiles[x][y] = tile;
         
         // If tile is passable, make a note of it.  This makes it easier to
         // determine what our spawn/goal end points are later.
-        if (tile.passable === 0) _passableTiles.push(tile);
+        if (tile.passable) _passableTiles.push(tile);
     }
     
     self.getEndPoints = function () {
@@ -71,19 +67,41 @@ var Map = function (config) {
         endPoints = {
             spawn: _passableTiles[spawnIdx],
             goal : _passableTiles[goalIdx]
-        }
+        };
         
         return endPoints;
-    }
+    };
+
+    self.markEndPoints = function () {
+        if (!endPoints) return;
+        _tiles[endPoints.spawn.x][endPoints.spawn.y].isSpawn = true;
+        _tiles[endPoints.goal.x][endPoints.goal.y].isGoal = true;
+    };
     
     /**
      * Solves the path between the given points.
      *
      * @private
      */
-    function _solveMaze (start, end) {
-        // TODO
-    }
+    self.getInitialBearing = function (start, end) {
+        var path = [];
+        function __checkPassable(x, y) {
+            try {
+                if (_tiles[x][y].passable) return true;
+            } catch (e) {}
+
+            return false;
+        }
+
+        var solver = new ROT.Path.Dijkstra(start.x, start.y, __checkPassable);
+            solver.compute(end.x, end.y, function (x, y) {
+                path.push({x:x,y:y});
+            });
+
+        var firstInPath = path[path.length - 2];
+
+        return [firstInPath.x - start.x, firstInPath.y - start.y];
+    };
     
     /**
      * Return a 2D array of tiles with the specifiyed x/y as the center and with
@@ -154,9 +172,9 @@ var Map = function (config) {
     
     // Initialize and generate the map data.
     _initMap(config.width, config.height);
-    new config.generator(config.width, config.height).create(_populateMap);
-    
-}
+    var generator = new config.generator(config.width, config.height);
+        generator.create(_populateMap);
+};
     
 return Map;
 

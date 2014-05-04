@@ -6,7 +6,7 @@ define(
 function () {
 
 var MiniMap = function (config) {
-    var self = this
+    var self = this,
         defaultConfig = {
             container : $("body"),
             cellSize  : 10,
@@ -18,7 +18,7 @@ var MiniMap = function (config) {
     // Make sure our container element is wrapped in jQuery.
     config.container = $(config.container);
     
-    var _tileSprites;
+    var _tileSprites, _playerEl;
     
     /**
      * Draw the map centering around the given position.
@@ -37,45 +37,45 @@ var MiniMap = function (config) {
         
         // Update player display.
         // NORTH
-        if (playerBearing[0] == 0 && playerBearing[1] == -1) {
+        if (playerBearing[0] === 0 && playerBearing[1] === -1) {
             config.container.css({
                 "-moz-transform"   : "rotate(0deg)",
                 "-webkit-transform": "rotate(0deg)"
             });
-            _player.css({
+            _playerEl.css({
                 "-moz-transform"   : "rotate(0deg)",
                 "-webkit-transform": "rotate(0deg)"
             });
         }
         // EAST
-        if (playerBearing[0] == 1 && playerBearing[1] == 0) {
+        if (playerBearing[0] === 1 && playerBearing[1] === 0) {
             config.container.css({
                 "-moz-transform"   : "rotate(-90deg)",
                 "-webkit-transform": "rotate(-90deg)"
             });
-            _player.css({
+            _playerEl.css({
                 "-moz-transform"   : "rotate(90deg)",
                 "-webkit-transform": "rotate(90deg)"
             });
         }
         // SOUTH
-        if (playerBearing[0] == 0 && playerBearing[1] == 1) {
+        if (playerBearing[0] === 0 && playerBearing[1] === 1) {
             config.container.css({
                 "-moz-transform"   : "rotate(-180deg)",
                 "-webkit-transform": "rotate(-180deg)"
             });
-            _player.css({
+            _playerEl.css({
                 "-moz-transform"   : "rotate(180deg)",
                 "-webkit-transform": "rotate(180deg)"
             });
         }
         // WEST
-        if (playerBearing[0] == -1 && playerBearing[1] == 0) {
+        if (playerBearing[0] === -1 && playerBearing[1] === 0) {
             config.container.css({
                 "-moz-transform"   : "rotate(-270deg)",
                 "-webkit-transform": "rotate(-270deg)"
             });
-            _player.css({
+            _playerEl.css({
                 "-moz-transform"   : "rotate(270deg)",
                 "-webkit-transform": "rotate(270deg)"
             });
@@ -88,7 +88,17 @@ var MiniMap = function (config) {
      * @param {Object} tile - A Tile object.
      */
     self.drawTile = function (tileSprite, tileData) {
-        if (tileData.passable) {
+        if (tileData.isGoal) {
+            tileSprite.css({
+                "background": "green"
+            });
+        }
+        else if (tileData.isSpawn) {
+            tileSprite.css({
+                "background": "blue"
+            });
+        }
+        else if (tileData.passable) {
             tileSprite.css({
                 "background": "white"
             });
@@ -97,7 +107,7 @@ var MiniMap = function (config) {
                 "background": "black"
             });
         }
-    }
+    };
     
     /**
      * Initializes the mini-map container and gets it ready to display a cross-
@@ -133,7 +143,7 @@ var MiniMap = function (config) {
         }
         
         // Draw player.
-        _player = tileEl.clone()
+        _playerEl = tileEl.clone()
             .addClass("player")
             .css({
                 "top"   : (config.viewRadius * config.cellSize) + "px",
@@ -142,12 +152,12 @@ var MiniMap = function (config) {
                 "height": config.cellSize
             });
         
-        config.container.append(_player);
+        config.container.append(_playerEl);
     }
     
     // Initialize the MiniMap instance.
     _initContainer();
-}
+};
 
 return MiniMap;
 
