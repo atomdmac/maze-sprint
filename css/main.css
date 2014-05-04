@@ -28,3 +28,8 @@
 .player {
     background: url(../img/minimap/player.png);
 }
+
+.footer {
+    position: absolute;
+    bottom: 0;
+}
