@@ -197,7 +197,7 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
             // Down arrow
             case 40:
                 e.preventDefault(); // Prevent scrolling the window.
-                // Not used
+                if (_undoManager.hasUndo())_undoManager.undo();
                 break;
             default:
                 break;
