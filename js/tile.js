@@ -20,7 +20,7 @@ var Tile = function (config) {
     self = this;
     
     config = $.extend(self, defaultConfig, config);
-}
+};
 
 return Tile;
 
