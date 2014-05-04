@@ -122,13 +122,14 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
     
     // Handle keyboard input for movement.
     $(window).keydown(function(e) {
+        var from, to;
         switch (e.which) {
             // Left arrow
             case 37:
                 e.preventDefault(); // Prevent scrolling the window.
                 
                 if (_checkMove("left")) {
-                    var from = {
+                    from = {
                         position: {x: player.x, y: player.y},
                         bearing : [player.bearing[0], player.bearing[1]]
                     };
@@ -136,7 +137,7 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
                     player.move();
                     player.bearLeft();
                     
-                    var to =  {
+                    to =  {
                         position: {x: player.x, y: player.y},
                         bearing : [player.bearing[0], player.bearing[1]]
                     };
@@ -152,14 +153,14 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
                 e.preventDefault(); // Prevent scrolling the window.
                 
                 if (_checkMove("forward")) {
-                    var from = {
+                    from = {
                         position: {x: player.x, y: player.y},
                         bearing : [player.bearing[0], player.bearing[1]]
                     };
                         
                     player.move();
                     
-                    var to =  {
+                    to =  {
                         position: {x: player.x, y: player.y},
                         bearing : [player.bearing[0], player.bearing[1]]
                     };
@@ -175,7 +176,7 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
                 e.preventDefault(); // Prevent scrolling the window.
                 
                 if (_checkMove("right")) {
-                    var from = {
+                    from = {
                         position: {x: player.x, y: player.y},
                         bearing : [player.bearing[0], player.bearing[1]]
                     };
@@ -183,7 +184,7 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
                     player.move();
                     player.bearRight();
                     
-                    var to =  {
+                    to =  {
                         position: {x: player.x, y: player.y},
                         bearing : [player.bearing[0], player.bearing[1]]
                     };
