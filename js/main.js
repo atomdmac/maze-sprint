@@ -216,7 +216,6 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
             // Scroll up
             case 1:
                 e.preventDefault(); // Prevent scrolling the window.
-                console.log("TODO: Handle redo.");
                 if (_undoManager.hasRedo()) {
                     _undoManager.redo();
                 }
@@ -224,7 +223,6 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
             // Scroll down
             case -1:
                 e.preventDefault(); // Prevent scrolling the window.
-                console.log("TODO: Handle undo.");
                 if (_undoManager.hasUndo()) {
                     _undoManager.undo();
                 }
