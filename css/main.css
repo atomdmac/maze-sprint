@@ -1,6 +1,14 @@
 .mini-map {
     position: absolute;
     border: 1px solid black;
+    /* Firefox */
+    -moz-transition: all 0.5s ease;
+    /* WebKit */
+    -webkit-transition: all 0.5s ease;
+    /* Opera */
+    -o-transition: all 0.5s ease;
+    /* Standard */
+    transition: all 0.5s ease;
 }
 .tile {
     position: absolute;
