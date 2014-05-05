@@ -28,14 +28,14 @@ var Player = function (config) {
      */
     self.redo = function () {
         // TODO
-    }
+    };
     
     /**
      * Undo a previously recorded action.
      */
     self.undo = function () {
         // TODO
-    }
+    };
     
     // Define getters for x/y coords to make 'em easier to access.
     self.__defineGetter__("x", function () {
@@ -102,8 +102,8 @@ var Player = function (config) {
             }
             self.bearLeft();
         }
-    }
-}
+    };
+};
 
 return Player;
 });
