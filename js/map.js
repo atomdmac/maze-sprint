@@ -10,7 +10,7 @@ var Map = function (config) {
         defaultConfig = {
             width : 50,
             height: 50,
-            generator: ROT.Map.DividedMaze
+            generator: ROT.Map.IceyMaze
         };
     
     // Merge default config with defaults.
@@ -93,7 +93,7 @@ var Map = function (config) {
             return false;
         }
 
-        var solver = new ROT.Path.Dijkstra(start.x, start.y, __checkPassable);
+        var solver = new ROT.Path.Dijkstra(start.x, start.y, __checkPassable, {topology: 4});
             solver.compute(end.x, end.y, function (x, y) {
                 path.push({x:x,y:y});
             });
@@ -172,7 +172,7 @@ var Map = function (config) {
     
     // Initialize and generate the map data.
     _initMap(config.width, config.height);
-    var generator = new config.generator(config.width, config.height);
+    var generator = new config.generator(config.width, config.height, 0);
         generator.create(_populateMap);
 };
     
