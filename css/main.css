@@ -2,18 +2,33 @@
     position: absolute;
     border: 1px solid black;
     /* Firefox */
-    -moz-transition: all 0.5s ease;
+    /* -moz-transition: all 0.5s ease; */
     /* WebKit */
-    -webkit-transition: all 0.5s ease;
+    /*-webkit-transition: all 0.5s ease; */
     /* Opera */
-    -o-transition: all 0.5s ease;
+    /* -o-transition: all 0.5s ease;*/
     /* Standard */
-    transition: all 0.5s ease;
+    /* transition: all 0.5s ease;*/
 }
 .tile {
     position: absolute;
 }
-
+.messages {
+    position: absolute;
+    width: 800px;
+    height: 600px;
+    z-index: 10;
+}
+.message {
+    position: relative;
+    top: 50%;
+    text-align: center;
+    display: none;
+    font-size: 100px;
+}
+.win-message {
+    color: green;
+}
 .first-person {
     position: absolute;
     border: 1px solid black;

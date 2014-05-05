@@ -61,7 +61,8 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
         var playerTile = tiles[1][2], safety = 0;
         while (playerTile.x != player.x || playerTile.y != player.y) {
             tiles = rotate(tiles);
-            playerTile = tiles[1][2], safety = 0;
+            playerTile = tiles[1][2];
+            safety = 0;
             // A safety clause to make sure that my hastily written code doesn't
             // break FireFox.  I know, I know... I'm worse than Hitler.
         
@@ -118,6 +119,14 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
             }
         });
     }
+
+    function _checkWin () {
+        if(player.x == endPoints.goal.x && player.y === endPoints.goal.y) {
+            $(".win-message").show();
+        } else {
+            $(".win-message").hide();
+        }
+    }
     
     
     // Handle keyboard input for movement.
@@ -145,6 +154,7 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
                     
                     miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing, endPoints);
                     firstPerson.setPerspective(_getPlayerPerspective());
+                    _checkWin();
                 }
                 
                 break;
@@ -168,6 +178,7 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
                     
                     miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing);
                     firstPerson.setPerspective(_getPlayerPerspective());
+                    _checkWin();
                 }
                 
                 break;
@@ -192,6 +203,7 @@ function (Map, MiniMap, Player, FirstPerson, UndoManager) {
                     
                     miniMap.draw(map.getTilesInArea(player.x, player.y, 5), player.bearing);
                     firstPerson.setPerspective(_getPlayerPerspective());
+                    _checkWin();
                 }
                 
                 break;
